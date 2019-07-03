@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, Link } from 'react-router-dom';
-import { useStyles } from './styles';
+import { styles } from './styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Home from './Home/Home';
 import MyBooks from './MyBooks/MyBooks';
 import Favourites from './Favourites/Favourites';
@@ -19,7 +20,9 @@ import {
   faHeart,
   faBookReader,
   faBook
-} from '@fortawesome/free-solid-svg-icons'
+} from '@fortawesome/free-solid-svg-icons';
+
+const useStyles = makeStyles(styles);
 
 const App = () => {
   const [open, setOpen] = React.useState(false);

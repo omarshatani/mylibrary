@@ -1,7 +1,7 @@
-import { makeStyles } from '@material-ui/core/styles';
+import { fade } from '@material-ui/core/styles';
 
 const drawerWidth = 220;
-export const useStyles = makeStyles(theme => ({
+export const styles = theme => ({
   root: {
     display: 'flex',
   },
@@ -68,11 +68,62 @@ export const useStyles = makeStyles(theme => ({
     padding: theme.spacing(1, 2)
   },
   paper: {
-    backgroundColor: '#2f3133 !important'
+    backgroundColor: '#2f3133'
   },
   itemColor: {
     color: 'rgba(255, 255, 255, 0.7)'
-  }
-}));
+  },
+  form: {
+    padding: '20px 0'
+  },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  },
+  searchRoot: {
+      padding: '45px 0'
+  },
+  search: {
+      display: 'flex',
+      height: '55px',
+      borderRadius: theme.shape.borderRadius,
+      boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)',
+      backgroundColor: fade(theme.palette.common.white, 0.2),
+      '&:hover': {
+        backgroundColor: fade(theme.palette.common.white, 1),
+      },
+      marginLeft: 0,
+      width: '100%',
+      [theme.breakpoints.up('sm')]: {
+        // marginLeft: theme.spacing(1),
+        width: '80%',
+      },
+      [theme.breakpoints.up('lg')]: {
+          // marginLeft: theme.spacing(1),
+          width: '50%',
+        },
+    },
+    searchIcon: {
+      // width: theme.spacing(7),
+      width: '10%',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center'
+    },
+    inputRoot: {
+      color: 'inherit',
+      width: '90%',
+    },
+    inputInput: {
+      // padding: theme.spacing(2, 1, 2, 9),
+      transition: theme.transitions.create('width'),
+      width: '100%',
+      // [theme.breakpoints.up('sm')]: {
+      //   width: 130,
+      //   '&:focus': {
+      //     width: 200,
+      //   },
+      // },
+    },
 
-// export const classes = useStyles();
+})

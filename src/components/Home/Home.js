@@ -2,77 +2,21 @@ import React from 'react';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import { fade, makeStyles } from '@material-ui/core/styles';
+import { styles } from '../styles';
+import { makeStyles } from '@material-ui/core/styles';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import InputLabel from '@material-ui/core/InputLabel';
 import InputBase from '@material-ui/core/InputBase';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import Card from '../Card/Card'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { 
-    faSearch
-} from '@fortawesome/free-solid-svg-icons'
+import Card from '../Card/Card';
+import { Search } from '@material-ui/icons';
 
-const useStyles = makeStyles(theme => ({
-    form: {
-      padding: '20px 0'
-    },
-    formControl: {
-      margin: theme.spacing(1),
-      minWidth: 120,
-    },
-    searchRoot: {
-        padding: '45px 0'
-    },
-    search: {
-        position: 'relative',
-        borderRadius: theme.shape.borderRadius,
-        boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)',
-        backgroundColor: fade(theme.palette.common.white, 0.2),
-        '&:hover': {
-          backgroundColor: fade(theme.palette.common.white, 1),
-        },
-        marginLeft: 0,
-        width: '100%',
-        [theme.breakpoints.up('sm')]: {
-          marginLeft: theme.spacing(1),
-          width: '80%',
-        },
-        [theme.breakpoints.up('lg')]: {
-            marginLeft: theme.spacing(1),
-            width: '50%',
-          },
-      },
-      searchIcon: {
-        width: theme.spacing(7),
-        height: '100%',
-        position: 'absolute',
-        pointerEvents: 'none',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-      },
-      inputRoot: {
-        color: 'inherit',
-      },
-      inputInput: {
-        padding: theme.spacing(2, 1, 2, 9),
-        transition: theme.transitions.create('width'),
-        width: '100%',
-        [theme.breakpoints.up('sm')]: {
-          width: 120,
-          '&:focus': {
-            width: 200,
-          },
-        },
-      }
-  }));
+const useStyles = makeStyles(styles);
 
-const Home = props => {
+const Home = () => {
     const classes = useStyles();
-    console.log(classes)
     const handleChange = (event) => {
         setValues(oldValues => ({
             ...oldValues,
@@ -95,7 +39,7 @@ const Home = props => {
                 justify="center"
                 alignItems="center"
                 >
-                <Typography variant="h2" component="h2">La mia libreria</Typography>
+                <Typography variant="h2" component="h2">Home</Typography>
             </Grid>
             <Grid
                 container
@@ -103,7 +47,10 @@ const Home = props => {
                 alignItems="center"
                 className={classes.searchRoot}
                 >
-                    <FormControl variant="outlined" className={classes.formControl}>
+                    <FormControl 
+                    variant="outlined" 
+                    className={classes.formControl}
+                    >
                         <InputLabel ref={inputLabel} htmlFor="categoria">
                             Categorie
                         </InputLabel>
@@ -116,19 +63,19 @@ const Home = props => {
                         <MenuItem value="">
                             <em>Nessuna</em>
                         </MenuItem>
-                        <MenuItem value={'Horror'}>Horror</MenuItem>
-                        <MenuItem value={'Horror'}>Horror</MenuItem>
-                        <MenuItem value={'Horror'}>Horror</MenuItem>
-                        <MenuItem value={'Horror'}>Horror</MenuItem>
-                        <MenuItem value={'Horror'}>Horror</MenuItem>
+                        <MenuItem value={'Romanzo'}>Romanzo</MenuItem>
+                        <MenuItem value={'Giallo'}>Giallo</MenuItem>
+                        <MenuItem value={'Fantasy'}>Fantasy</MenuItem>
+                        <MenuItem value={'Avventura'}>Avventura</MenuItem>
+                        <MenuItem value={'Thriller'}>Thriller</MenuItem>
                         </Select>
                     </FormControl>
                 <div className={classes.search}>
                     <div className={classes.searchIcon}>
-                    <FontAwesomeIcon icon={faSearch} />
+                        <Search fontSize="small" />
                     </div>
                     <InputBase
-                    placeholder="Cerca.."
+                    placeholder="Cerca nuovi libri..."
                     classes={{
                         root: classes.inputRoot,
                         input: classes.inputInput,
