@@ -15,7 +15,7 @@ import { Search } from '@material-ui/icons'
 
 const useStyles = makeStyles(styles);
 
-const MyBooks = () => {
+const MyBooks = (props) => {
     const classes = useStyles();
     const handleChange = (event) => {
         setValues(oldValues => ({
@@ -31,6 +31,23 @@ const MyBooks = () => {
     React.useEffect(() => {
       setLabelWidth(inputLabel.current.offsetWidth);
     }, []);
+
+    
+    let arrayCards = []
+
+    arrayCards = props.books.map(el => 
+    <Card 
+        props={props.props}
+        key={el.id} 
+        title={el.title} 
+        desc={el.description} 
+        image={el.imageUrl} 
+        stato={el.stato}
+        generi={el.generi}
+        aggiunto={el.aggiunto === 1 ? true : false}
+        handleAddBook={() => props.addBook(el)}
+        />)
+
     
     return (
         <Container maxWidth="lg">
@@ -84,8 +101,10 @@ const MyBooks = () => {
                     />
                 </div>
             </Grid>
-            <Grid container>
-                <Card />
+            <Grid container justify="space-around">
+                {
+                    arrayCards
+                }
             </Grid>
         </Container>
     )

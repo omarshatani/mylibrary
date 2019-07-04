@@ -4,6 +4,11 @@ const drawerWidth = 220;
 export const styles = theme => ({
   root: {
     display: 'flex',
+    flexDirection: 'column'
+  },
+  footer: {
+    display: 'flex',
+    justifyContent: 'flex-end'
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
@@ -125,5 +130,7 @@ export const styles = theme => ({
       //   },
       // },
     },
-
+    cardMargin: {
+      margin: '10px 0'
+    }
 })

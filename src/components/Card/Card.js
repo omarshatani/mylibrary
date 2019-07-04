@@ -7,19 +7,23 @@ import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Button from '@material-ui/core/Button';
 import Chip from '@material-ui/core/Chip';
-import { Add, Favorite } from '@material-ui/icons';
-import bookCover from '../../images/bookCover.jpg';
+import { Add, Favorite, Done } from '@material-ui/icons';
 import Tooltip from '@material-ui/core/Tooltip';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+import Input from '@material-ui/core/Input';
+import MenuItem from '@material-ui/core/MenuItem';
 
 const useStyles = makeStyles(theme => ({
   card: {
     width: 345,
+    margin: '10px 0'
   },
   button: {
-    margin: 0
+    margin: 0,
   },
   media: {
     height: 300,
@@ -44,7 +48,7 @@ const useStyles = makeStyles(theme => ({
     fontSize: '11px'
   },
   bottomActions: {
-    width: '85%',
+    width: '90%',
     margin: '0 auto'
     // display: 'flex',
     // flexWrap: 'wrap',
@@ -58,6 +62,9 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     flexWrap: 'wrap'
   },
+  add: {
+    marginLeft: '5px',
+  },
   body2: {
     paddingTop: theme.spacing(1),
     fontSize: '0.8rem'
@@ -66,17 +73,41 @@ const useStyles = makeStyles(theme => ({
     marginRight: theme.spacing(1)
   },
   cardsActionsRoot: {
-    padding: '10px 0'
+    padding: '10px 0',
+    display: 'flex',
+    justifyContent: 'center'
+  },
+  formControlRoot: {
+    minWidth: 120
+  },
+  selectAction: {
+    width: '65%',
+    display: 'flex',
+    justifyContent: 'space-evenly',
+    alignItems: 'baseline',
+    marginBottom: '13px'
   }
 }));
 
-export default function RecipeReviewCard(props) {
-  const classes = useStyles();
+export default function BookCard(props) {
   console.log(props)
+  const classes = useStyles();
 
-  const myBook = false;
+  let generi = []
+  if (props.generi) {
+    generi =  props.generi.split(',');
+  } 
 
-  let generi = ['Horror', 'Documentario', 'Sci-Fi', 'Mistero', 'Azione', 'Psicologico']
+  function handleChange(event) {
+    setValues(oldValues => ({
+      ...oldValues,
+      [event.target.name]: event.target.value,
+    }));
+  }
+
+  const [values, setValues] = React.useState({
+    stato: props.stato,
+  });
 
   return (
     <Card className={classes.card}>
@@ -85,12 +116,12 @@ export default function RecipeReviewCard(props) {
           title: classes.title,
           subheader: classes.subheader
         }}
-        title="Oceanic"
+        title={props.title}
       />
       <CardMedia
         className={classes.media}
-        image={bookCover}
-        title="Oceanic"
+        image={props.image}
+        title={props.title}
       />
       <CardContent>
         <div>
@@ -100,34 +131,69 @@ export default function RecipeReviewCard(props) {
         </div>
         <Typography variant="body2" color="textSecondary" component="p" classes={{
           body2: classes.body2
-        }}>
-        Oceanic is a generous, romantic, and ambitious look at the different stages of life, 
-        and how we experience the love and wonder that lead us to become 
-        more fully realized and compassionate as we grow each decade.
+        }}> {props.desc}
         </Typography>
       </CardContent>
-      <CardActions disableSpacing className={classes.bottomActions} classes={{
-        root: classes.cardsActionsRoot
-      }}>
+      <CardActions disableSpacing 
+        className={classes.bottomActions} 
+        classes={{
+          root: classes.cardsActionsRoot
+        }}>
         {
-          myBook ? 
-          <ButtonGroup 
-            variant="contained"
-            color="primary" aria-label="Outlined primary button group">
-            <Button variant="contained" color="primary" className={classes.button}>
+         !props.aggiunto ? 
+            <Button 
+              variant="contained" 
+              size="medium" 
+              color="primary" 
+              className={classes.button}
+              onClick={props.handleAddBook}
+              >
               Aggiungi
+              <Add className={classes.add} fontSize="small" />
             </Button>
-            <Button className={classes.button}>
-              <Add />
-            </Button>
-          </ButtonGroup>
-          : 
-          // <Fab color="secondary" size="small" aria-label="Favourite" className={classes.fab}>
-            <Tooltip title="Aggiungi ai preferiti">
-              <Favorite color="secondary" fontSize="large" />
-            </Tooltip>
-            
+          : null
+        }
 
+        {
+          props.aggiunto ?
+            props.props.location.pathname === '/' ?
+              <Button 
+                disabled
+                variant="contained" 
+                size="medium" 
+                color="primary" 
+                className={classes.button}
+                onClick={props.handleAddBook}
+                >
+                Aggiunto
+                <Done className={classes.add} fontSize="small" />
+              </Button>
+              :
+              <>
+              <Tooltip title="Aggiungi ai preferiti">
+                <Favorite color="secondary" fontSize="large" />
+              </Tooltip>
+              <div className={classes.selectAction}>
+                <Typography style={{ marginRight: '10px'}}>STATO</Typography>
+                <FormControl className={classes.formControl} classes={{
+                  root: classes.formControlRoot
+                }}>
+                <InputLabel htmlFor="stato">Seleziona</InputLabel>
+                <Select
+                  value={props.stato}
+                  onChange={handleChange}
+                  input={<Input name="stato" id="stato" />}
+                >
+                  <MenuItem value="Non iniziato">
+                    <em>Non iniziato</em>
+                  </MenuItem>
+                  <MenuItem value={'In lettura'}>In lettura</MenuItem>
+                  <MenuItem value={'Completato'}>Completato</MenuItem>
+                </Select>
+              </FormControl>
+            </div>
+            </>
+            : null
         }
 
       </CardActions>

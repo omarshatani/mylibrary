@@ -2,12 +2,8 @@ import React from 'react';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-<<<<<<< HEAD
 import { styles } from '../styles';
 import { makeStyles } from '@material-ui/core/styles';
-=======
-import useStyles from './styles/styles';
->>>>>>> 6fe2c3268ecdc6d3cb35ed5c42529e0e92c800b8
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import InputLabel from '@material-ui/core/InputLabel';
 import InputBase from '@material-ui/core/InputBase';
@@ -17,13 +13,10 @@ import Select from '@material-ui/core/Select';
 import Card from '../Card/Card';
 import { Search } from '@material-ui/icons';
 
-<<<<<<< HEAD
 const useStyles = makeStyles(styles);
 
-const Home = () => {
-=======
-const Home = props => {
->>>>>>> 6fe2c3268ecdc6d3cb35ed5c42529e0e92c800b8
+const Home = (props) => {
+    console.log(props)
     const classes = useStyles();
     const handleChange = (event) => {
         setValues(oldValues => ({
@@ -40,6 +33,21 @@ const Home = props => {
       setLabelWidth(inputLabel.current.offsetWidth);
     }, []);
     
+    let arrayCards = []
+
+    arrayCards = props.books.map(el => 
+    <Card 
+        props={props.props}
+        key={el.id} 
+        title={el.title} 
+        desc={el.description} 
+        image={el.imageUrl} 
+        stato={el.stato}
+        generi={el.generi}
+        aggiunto={el.aggiunto === 1 ? true : false}
+        handleAddBook={() => props.addBook(el)}
+        />)
+
     return (
         <Container maxWidth="lg">
             <Grid
@@ -80,11 +88,7 @@ const Home = props => {
                     </FormControl>
                 <div className={classes.search}>
                     <div className={classes.searchIcon}>
-<<<<<<< HEAD
                         <Search fontSize="small" />
-=======
-                    <FontAwesomeIcon icon={faSearch} size="sm" />
->>>>>>> 6fe2c3268ecdc6d3cb35ed5c42529e0e92c800b8
                     </div>
                     <InputBase
                     placeholder="Cerca nuovi libri..."
@@ -96,8 +100,11 @@ const Home = props => {
                     />
                 </div>
             </Grid>
-            <Grid container>
-                <Card />
+            <Grid container
+                justify="space-around">
+                {
+                    arrayCards
+                }
             </Grid>
         </Container>
     )
