@@ -32,7 +32,9 @@ class App extends Component {
     success: undefined,
     books: [],
     myBooks: [],
-    snackbarOpen: false
+    fav: [],
+    snackbarOpen: false,
+    action: ''
   }
 
   componentWillMount = () => {
@@ -48,35 +50,72 @@ class App extends Component {
     })
 }
 
-  handleDrawerOpen = () => {
+  handleDrawerOpen = e => {
     this.setState({ open: true })
   }
 
-  handleDrawerClose = () => {
+  handleDrawerClose = e => {
     this.setState({ open: false })
   }
 
   handleAddBook = (book) => {
     API.addBook(book)
     .then(res => {
-      console.log(res);
-      this.setState({ success: true, snackbarOpen: true })
       API.getBooks()
       .then(res => this.setState({ books: res.data }))
+      API.getMyBooks()
+      .then(res => this.setState({ myBooks: [...this.state.myBooks, ...res.data] }))
+      this.setState({ success: true, action: 'add', snackbarOpen: true })
     })
     .catch(err => {
       console.error(err)
-      this.setState({ success: false, snackbarOpen: true })
+      this.setState({ success: false, action: 'add', snackbarOpen: true })
     })
-    
+  }
+
+  handleRemoveBook = (book) => {
+    API.removeBook(book)
+    .then(res => {
+      API.getBooks()
+      .then(res => this.setState({ books: res.data }))
+      API.getMyBooks()
+      .then(res => this.setState({ myBooks: res.data }))
+      this.setState({ success: true, action: 'remove', snackbarOpen: true })
+    })
+    .catch(err => {
+      console.error(err)
+      this.setState({ success: false, action: 'remove', snackbarOpen: true })
+    })
   }
 
   handleSnackbarClose = () => {
     this.setState({ snackbarOpen: false })
   }
+
+  handleAddFav = (book) => {
+    API.addFav(book)
+    .then(res => {
+      console.log('aggiunta fav', res);
+      API.getMyBooks()
+      .then(res => this.setState({ myBooks: res.data }))
+      API.getFav(res => this.setState({ fav: res.data }))
+      // this.setState({ fav: res.data })
+    })
+  }
+
+  handleRemoveFav = (book) => {
+    console.log('libro da levare dai fav', book)
+    API.deleteFav(book)
+    .then(res => {
+      console.log('rimozione fav', res);
+      API.getMyBooks()
+      .then(res => this.setState({ myBooks: res.data }))
+      API.getFav()
+      .then(res => this.setState({ fav: res.data }))
+    })
+  }
   
   render () {
-
     const { open } = this.state;
     const { classes } = this.props;
     return (
@@ -120,13 +159,31 @@ class App extends Component {
             </List>
           </Drawer>
         <main className={classes.content}>
-          {/* <div className={classes.toolbar} /> */}
-            <Route path="/" exact render={(props) => <Home books={this.state.books} addBook={this.handleAddBook} props={props} />} />
-            <Route path="/mybooks/" render={(props) => <MyBooks books={this.state.myBooks} addBook={this.handleAddBook} props={props} />} />
+            <Route path="/" exact render={(props) => 
+            <Home 
+              books={this.state.books} 
+              addBook={this.handleAddBook} 
+              props={props} 
+              />} 
+            />
+            <Route path="/mybooks/" render={(props) => 
+            <MyBooks 
+              books={this.state.myBooks} 
+              addBook={this.handleAddBook}
+              removeBook={this.handleRemoveBook}
+              addFav={this.handleAddFav}
+              removeFav={this.handleRemoveFav}
+              props={props} 
+              />} 
+            />
             <Route path="/favourites/" component={Favourites} />
             {
-              this.state.snackbarOpen ? 
-              <Snackbar success={this.state.success} onClose={this.handleSnackbarClose} />
+              this.state.snackbarOpen ?
+              <Snackbar
+                success={this.state.success} 
+                action={this.state.action} 
+                snackClosed={() => this.setState({ snackbarOpen: false })}
+              />
               :
               null
             }

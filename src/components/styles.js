@@ -1,4 +1,5 @@
 import { fade } from '@material-ui/core/styles';
+import { red, green, amber } from '@material-ui/core/colors';
 
 const drawerWidth = 220;
 export const styles = theme => ({
@@ -8,7 +9,8 @@ export const styles = theme => ({
   },
   footer: {
     display: 'flex',
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
+    bottom: 0
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
@@ -89,24 +91,24 @@ export const styles = theme => ({
       padding: '45px 0'
   },
   search: {
-      display: 'flex',
-      height: '55px',
-      borderRadius: theme.shape.borderRadius,
-      boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)',
-      backgroundColor: fade(theme.palette.common.white, 0.2),
-      '&:hover': {
-        backgroundColor: fade(theme.palette.common.white, 1),
-      },
-      marginLeft: 0,
-      width: '100%',
-      [theme.breakpoints.up('sm')]: {
+    display: 'flex',
+    height: '55px',
+    borderRadius: theme.shape.borderRadius,
+    boxShadow: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)',
+    backgroundColor: fade(theme.palette.common.white, 0.2),
+    '&:hover': {
+      backgroundColor: fade(theme.palette.common.white, 1),
+    },
+    marginLeft: 0,
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+      // marginLeft: theme.spacing(1),
+      width: '80%',
+    },
+    [theme.breakpoints.up('lg')]: {
         // marginLeft: theme.spacing(1),
-        width: '80%',
+        width: '50%',
       },
-      [theme.breakpoints.up('lg')]: {
-          // marginLeft: theme.spacing(1),
-          width: '50%',
-        },
     },
     searchIcon: {
       // width: theme.spacing(7),
@@ -132,5 +134,111 @@ export const styles = theme => ({
     },
     cardMargin: {
       margin: '10px 0'
-    }
+    },
+    card: {
+      width: 345,
+      margin: '10px 0'
+    },
+    button: {
+      margin: 0,
+    },
+    media: {
+      height: 300,
+      backgroundSize: 'contain'
+    },
+    expand: {
+      transform: 'rotate(0deg)',
+      marginLeft: 'auto',
+      transition: theme.transitions.create('transform', {
+        duration: theme.transitions.duration.shortest,
+      }),
+    },
+    expandOpen: {
+      transform: 'rotate(180deg)',
+    },
+    avatar: {
+      backgroundColor: red[500],
+    },
+    chip: {
+      margin: '5px 2px',
+      height: '22px',
+      fontSize: '11px'
+    },
+    bottomActions: {
+      width: '90%',
+      margin: '0 auto'
+    },
+    title: {
+      paddingBottom: theme.spacing(1),
+      textAlign: 'center',
+      fontSize: '1.2rem'
+    },
+    marginL1: {
+      marginLeft: '5px',
+    },
+    body2: {
+      paddingTop: theme.spacing(1),
+      fontSize: '0.8rem'
+    },
+    extended: {
+      marginRight: theme.spacing(1)
+    },
+    cardsActionsRoot: {
+      padding: '10px 0',
+      display: 'flex',
+      justifyContent: 'center'
+    },
+    formControlRoot: {
+      minWidth: 120
+    },
+    selectAction: {
+      width: '65%',
+      display: 'flex',
+      justifyContent: 'space-evenly',
+      alignItems: 'baseline',
+      marginBottom: '13px'
+    },
+    dFlex: {
+      display: 'flex',
+      flexWrap: 'wrap'
+    },
+    w100: {
+      width: '100%'
+    },
+    alignCenter: {
+      alignItems: 'center'
+    },
+    justifyCenter: {
+      justifyContent: 'center'
+    },
+    success: {
+      backgroundColor: green[600],
+    },
+    error: {
+      backgroundColor: theme.palette.error.dark,
+    },
+    info: {
+      backgroundColor: theme.palette.primary.main,
+    },
+    warning: {
+      backgroundColor: amber[700],
+    },
+    icon: {
+      fontSize: 20,
+    },
+    favIcon: {
+      fontSize: 25,
+      cursor: 'pointer'
+    },
+    iconVariant: {
+      opacity: 0.9,
+      marginRight: theme.spacing(1),
+    },
+    message: {
+      display: 'flex',
+      alignItems: 'center',
+    },
+    margin: {
+      margin: theme.spacing(1)
+    },
 })

@@ -1,202 +1,163 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import React, { PureComponent } from 'react';
+import { withStyles } from '@material-ui/core/styles';
+import { styles } from '../styles'
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
-import { red } from '@material-ui/core/colors';
 import Button from '@material-ui/core/Button';
 import Chip from '@material-ui/core/Chip';
-import { Add, Favorite, Done } from '@material-ui/icons';
+import { Add, FavoriteBorderSharp, Favorite, Done, Remove } from '@material-ui/icons';
 import Tooltip from '@material-ui/core/Tooltip';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
 import MenuItem from '@material-ui/core/MenuItem';
+import clsx from 'clsx';
 
-const useStyles = makeStyles(theme => ({
-  card: {
-    width: 345,
-    margin: '10px 0'
-  },
-  button: {
-    margin: 0,
-  },
-  media: {
-    height: 300,
-    backgroundSize: 'contain'
-  },
-  expand: {
-    transform: 'rotate(0deg)',
-    marginLeft: 'auto',
-    transition: theme.transitions.create('transform', {
-      duration: theme.transitions.duration.shortest,
-    }),
-  },
-  expandOpen: {
-    transform: 'rotate(180deg)',
-  },
-  avatar: {
-    backgroundColor: red[500],
-  },
-  chip: {
-    margin: '5px 2px',
-    height: '22px',
-    fontSize: '11px'
-  },
-  bottomActions: {
-    width: '90%',
-    margin: '0 auto'
-    // display: 'flex',
-    // flexWrap: 'wrap',
-    // justifyContent: 'center'
-  },
-  title: {
-    paddingBottom: theme.spacing(1),
-    textAlign: 'center'
-  },
-  subheader: {
-    display: 'flex',
-    flexWrap: 'wrap'
-  },
-  add: {
-    marginLeft: '5px',
-  },
-  body2: {
-    paddingTop: theme.spacing(1),
-    fontSize: '0.8rem'
-  },
-  extended: {
-    marginRight: theme.spacing(1)
-  },
-  cardsActionsRoot: {
-    padding: '10px 0',
-    display: 'flex',
-    justifyContent: 'center'
-  },
-  formControlRoot: {
-    minWidth: 120
-  },
-  selectAction: {
-    width: '65%',
-    display: 'flex',
-    justifyContent: 'space-evenly',
-    alignItems: 'baseline',
-    marginBottom: '13px'
-  }
-}));
+class BookCard extends PureComponent {
+  // constructor (props) {
+  //   super(props);
+  // }
 
-export default function BookCard(props) {
-  console.log(props)
-  const classes = useStyles();
-
-  let generi = []
-  if (props.generi) {
-    generi =  props.generi.split(',');
-  } 
-
-  function handleChange(event) {
-    setValues(oldValues => ({
-      ...oldValues,
-      [event.target.name]: event.target.value,
-    }));
+  state = {
+    stato: ''
   }
 
-  const [values, setValues] = React.useState({
-    stato: props.stato,
-  });
+  componentWillMount = () => {
+    const { stato } = this.props;
+    this.setState({ stato })
+  }
 
-  return (
-    <Card className={classes.card}>
-      <CardHeader
-        classes={{
-          title: classes.title,
-          subheader: classes.subheader
-        }}
-        title={props.title}
-      />
-      <CardMedia
-        className={classes.media}
-        image={props.image}
-        title={props.title}
-      />
-      <CardContent>
-        <div>
+  handleChange = event => {
+    this.setState(state => ({ ...state, [event.target.name]: event.target.value }))
+  }
+
+  render () {
+    let { generi, props, classes, handleAddBook, 
+      handleRemoveBook, title, image, desc, aggiunto, 
+      fav, handleAddFav, handleRemoveFav } = this.props;
+      console.log('fav', fav)
+    const { stato } = this.state;
+    if (generi) {
+      generi = generi.split(',');
+    }
+    return (
+      <Card className={classes.card}>
+        <CardHeader
+          classes={{
+            title: classes.title,
+            subheader: classes.dFlex
+          }}
+          title={title}
+        />
+        <CardMedia
+          className={classes.media}
+          image={image}
+          title={title}
+        />
+        <CardContent>
+          <div>
+            {
+              generi.map(text => <Chip key={text} label={text} color="primary" className={classes.chip} />)
+            }
+          </div>
+          <Typography variant="body2" color="textSecondary" component="p" classes={{
+            body2: classes.body2
+          }}> {desc}
+          </Typography>
+        </CardContent>
+        <CardActions disableSpacing 
+          className={classes.bottomActions} 
+          classes={{
+            root: classes.cardsActionsRoot
+          }}>
           {
-            generi.map(text => <Chip key={text} label={text} color="primary" className={classes.chip} />)
-          }
-        </div>
-        <Typography variant="body2" color="textSecondary" component="p" classes={{
-          body2: classes.body2
-        }}> {props.desc}
-        </Typography>
-      </CardContent>
-      <CardActions disableSpacing 
-        className={classes.bottomActions} 
-        classes={{
-          root: classes.cardsActionsRoot
-        }}>
-        {
-         !props.aggiunto ? 
-            <Button 
-              variant="contained" 
-              size="medium" 
-              color="primary" 
-              className={classes.button}
-              onClick={props.handleAddBook}
-              >
-              Aggiungi
-              <Add className={classes.add} fontSize="small" />
-            </Button>
-          : null
-        }
-
-        {
-          props.aggiunto ?
-            props.props.location.pathname === '/' ?
+           !aggiunto ? 
               <Button 
-                disabled
                 variant="contained" 
                 size="medium" 
                 color="primary" 
                 className={classes.button}
-                onClick={props.handleAddBook}
+                onClick={handleAddBook}
                 >
-                Aggiunto
-                <Done className={classes.add} fontSize="small" />
+                Aggiungi
+                <Add className={classes.marginL1} fontSize="small" />
               </Button>
-              :
-              <>
-              <Tooltip title="Aggiungi ai preferiti">
-                <Favorite color="secondary" fontSize="large" />
-              </Tooltip>
-              <div className={classes.selectAction}>
-                <Typography style={{ marginRight: '10px'}}>STATO</Typography>
-                <FormControl className={classes.formControl} classes={{
-                  root: classes.formControlRoot
-                }}>
-                <InputLabel htmlFor="stato">Seleziona</InputLabel>
-                <Select
-                  value={props.stato}
-                  onChange={handleChange}
-                  input={<Input name="stato" id="stato" />}
-                >
-                  <MenuItem value="Non iniziato">
-                    <em>Non iniziato</em>
-                  </MenuItem>
-                  <MenuItem value={'In lettura'}>In lettura</MenuItem>
-                  <MenuItem value={'Completato'}>Completato</MenuItem>
-                </Select>
-              </FormControl>
-            </div>
-            </>
             : null
-        }
+          }
+  
+          {
+            aggiunto ?
+              props.location.pathname === '/' ?
+                <Button 
+                  disabled
+                  variant="contained" 
+                  size="medium" 
+                  color="primary" 
+                  className={classes.button}
+                  onClick={handleAddBook}
+                  >
+                  Aggiunto
+                  <Done className={classes.marginL1} fontSize="small" />
+                </Button>
+                :
+                <div className={clsx(classes.dFlex, classes.alignCenter, classes.w100)}>
+                  <div style={{ width: '20%'}}>
+                    {
+                      !fav ?
+                      <Tooltip title="Aggiungi ai preferiti">
+                        <FavoriteBorderSharp className={classes.favIcon} onClick={handleAddFav} />
+                      </Tooltip>
+                      :
+                      <Tooltip title="Aggiunto ai preferiti">
+                        <Favorite color="secondary" className={classes.favIcon} onClick={handleRemoveFav} />
+                      </Tooltip>
+                    }
+                  </div>
+                  <div className={classes.selectAction} style={{ width: '80%'}}>
+                    <Typography style={{ marginRight: '10px'}}>STATO</Typography>
+                    <FormControl className={classes.formControl} classes={{
+                      root: classes.formControlRoot
+                    }}>
+                      <InputLabel htmlFor="stato">Seleziona</InputLabel>
+                      <Select
+                        value={stato}
+                        onChange={this.handleChange}
+                        input={<Input name="stato" id="stato" />}
+                      >
+                        <MenuItem value="Non iniziato">
+                          <em>Non iniziato</em>
+                        </MenuItem>
+                        <MenuItem value={'In lettura'}>In lettura</MenuItem>
+                        <MenuItem value={'Completato'}>Completato</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </div>
+                  <div className={clsx(classes.justifyCenter, classes.dFlex)} style={{ width: '100%'}}>
+                    <Button 
+                      variant="contained" 
+                      size="medium" 
+                      color="primary" 
+                      className={classes.button}
+                      onClick={handleRemoveBook}
+                      >
+                      Rimuovi
+                      <Remove className={classes.marginL1} fontSize="small" />
+                    </Button>
+                  </div>
+                </div>
+              : null
+          }
+  
+        </CardActions>
+      </Card>
+    );
+  }
 
-      </CardActions>
-    </Card>
-  );
 }
+
+export default withStyles(styles)(BookCard);
