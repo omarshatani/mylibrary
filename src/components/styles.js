@@ -56,6 +56,11 @@ export const styles = theme => ({
       width: theme.spacing(8) + 1,
     },
   },
+  addButtonBottom: {
+    position: 'fixed',
+    bottom: theme.spacing(2),
+    right: theme.spacing(3)
+  },
   toolbar: {
     display: 'flex',
     alignItems: 'center',
@@ -66,6 +71,9 @@ export const styles = theme => ({
   content: {
     flexGrow: 1,
     padding: theme.spacing(3),
+  },
+  gridPadding: {
+    padding: theme.spacing(7, 0)
   },
   listLink: {
     textDecoration: 'none',
@@ -86,6 +94,13 @@ export const styles = theme => ({
   formControl: {
     margin: theme.spacing(1),
     minWidth: 120,
+  },
+  dialog: {
+    width: 400
+  },
+  addForm:{
+    margin: theme.spacing(3),
+    minWidth: 200,
   },
   searchRoot: {
       padding: '45px 0'
@@ -210,6 +225,9 @@ export const styles = theme => ({
     },
     justifyCenter: {
       justifyContent: 'center'
+    },
+    alignBaseline: {
+      alignItems: 'baseline'
     },
     success: {
       backgroundColor: green[600],

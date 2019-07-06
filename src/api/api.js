@@ -56,3 +56,25 @@ export const deleteFav = (book) => {
         }
     })
 }
+
+export const updateStatus = (book, status) => {
+    console.log(book)
+    return axios.put(`${endpoint}/books/update`, {
+        params: {
+            id: book.id,
+            stato: status
+        }
+    })
+}
+
+export const addNewBook = (book) => {
+    console.log(book)
+    return axios.post(`${endpoint}/books`, {
+        params: {
+            title: book.title,
+            description: book.description,
+            imageUrl: book.imageUrl,
+            generi: book.generi
+        }
+    })
+}

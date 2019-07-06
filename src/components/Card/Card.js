@@ -33,14 +33,15 @@ class BookCard extends PureComponent {
   }
 
   handleChange = event => {
+    const { updateStatus } = this.props;
     this.setState(state => ({ ...state, [event.target.name]: event.target.value }))
+    updateStatus(event.target.value);
   }
 
   render () {
     let { generi, props, classes, handleAddBook, 
       handleRemoveBook, title, image, desc, aggiunto, 
       fav, handleAddFav, handleRemoveFav } = this.props;
-      console.log('fav', fav)
     const { stato } = this.state;
     if (generi) {
       generi = generi.split(',');
@@ -123,9 +124,10 @@ class BookCard extends PureComponent {
                     <FormControl className={classes.formControl} classes={{
                       root: classes.formControlRoot
                     }}>
-                      <InputLabel htmlFor="stato">Seleziona</InputLabel>
+                      <InputLabel htmlFor="stato">{props.location.pathname !== '/mybooks/' ? '' : 'Seleziona'}</InputLabel>
                       <Select
                         value={stato}
+                        disabled={props.location.pathname !== '/mybooks/'}
                         onChange={this.handleChange}
                         input={<Input name="stato" id="stato" />}
                       >
@@ -137,18 +139,22 @@ class BookCard extends PureComponent {
                       </Select>
                     </FormControl>
                   </div>
-                  <div className={clsx(classes.justifyCenter, classes.dFlex)} style={{ width: '100%'}}>
-                    <Button 
-                      variant="contained" 
-                      size="medium" 
-                      color="primary" 
-                      className={classes.button}
-                      onClick={handleRemoveBook}
-                      >
-                      Rimuovi
-                      <Remove className={classes.marginL1} fontSize="small" />
-                    </Button>
-                  </div>
+                  {
+                    props.location.pathname === '/mybooks/' ?
+                      <div className={clsx(classes.justifyCenter, classes.dFlex)} style={{ width: '100%'}}>
+                        <Button 
+                          variant="contained" 
+                          size="medium" 
+                          color="primary" 
+                          className={classes.button}
+                          onClick={handleRemoveBook}
+                          >
+                          Rimuovi
+                          <Remove className={classes.marginL1} fontSize="small" />
+                        </Button>
+                      </div>
+                    : null
+                  }
                 </div>
               : null
           }

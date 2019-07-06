@@ -11,7 +11,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Card from '../Card/Card';
-import { Search } from '@material-ui/icons'
+import { Search } from '@material-ui/icons';
+import escapeRegExp from 'escape-string-regexp'
 
 class MyBooks extends PureComponent {
 
@@ -22,7 +23,8 @@ class MyBooks extends PureComponent {
 
     state = {
         labelWidth: 0,
-        categoria: ''
+        categoria: '',
+        query: ''
     }
 
     componentDidMount = () => {
@@ -42,11 +44,13 @@ class MyBooks extends PureComponent {
     }
 
     render () {
-        const { books, props, addBook, removeBook, classes, addFav, removeFav } = this.props;
-        const { labelWidth, categoria } = this.state;
+        const { books, props, addBook, removeBook, classes, addFav, removeFav, updateStatus } = this.props;
+        const { labelWidth, categoria, query } = this.state;
         console.log(books)
-        let arrayCards = []
-        arrayCards = books.map(el => 
+        const match = new RegExp(escapeRegExp(query.split(' ').join('').toLowerCase(), 'i'))
+        const match2 = new RegExp(escapeRegExp(categoria), 'i')
+        let arrayCards = [];
+        arrayCards = books.filter(el => match2.test(el.generi)).filter(el => match.test(el.title.split(' ').join('').toLowerCase())).map(el => 
             <Grid item key={el.id} >
                 <Card 
                 props={props}
@@ -61,6 +65,7 @@ class MyBooks extends PureComponent {
                 handleRemoveBook={() => removeBook(el)}
                 handleAddFav={() => addFav(el)}
                 handleRemoveFav={() => removeFav(el)}
+                updateStatus={(newStatus) => updateStatus(el, newStatus)}
                 />
             </Grid>
         )
@@ -96,11 +101,13 @@ class MyBooks extends PureComponent {
                             <MenuItem value="">
                                 <em>Nessuna</em>
                             </MenuItem>
-                            <MenuItem value={'Romanzo'}>Romanzo</MenuItem>
+                            <MenuItem value={'Horror'}>Horror</MenuItem>
                             <MenuItem value={'Giallo'}>Giallo</MenuItem>
                             <MenuItem value={'Fantasy'}>Fantasy</MenuItem>
                             <MenuItem value={'Avventura'}>Avventura</MenuItem>
-                            <MenuItem value={'Thriller'}>Thriller</MenuItem>
+                            <MenuItem value={'Psicologico'}>Psicologico</MenuItem>
+                            <MenuItem value={'Sci-Fi'}>Sci-Fi</MenuItem>
+                            <MenuItem value={'Letteratura e poesia'}>Letteratura e poesia</MenuItem>
                             </Select>
                         </FormControl>
                     <div className={classes.search}>
@@ -108,12 +115,13 @@ class MyBooks extends PureComponent {
                             <Search fontSize="small" />
                         </div>
                         <InputBase
-                        placeholder="Cerca nuovi libri..."
+                        placeholder="Cerca tra i libri..."
                         classes={{
                             root: classes.inputRoot,
                             input: classes.inputInput,
                         }}
                         inputProps={{ 'aria-label': 'Cerca' }}
+                        onChange={(event) => this.setState({ query: event.target.value })}
                         />
                     </div>
                 </Grid>

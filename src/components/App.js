@@ -5,6 +5,8 @@ import { withStyles } from '@material-ui/core/styles';
 import Home from './Home/Home';
 import MyBooks from './MyBooks/MyBooks';
 import Favourites from './Favourites/Favourites';
+import Reading from './Reading/Reading';
+import Completed from './Completed/Completed';
 import clsx from 'clsx';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
@@ -41,12 +43,12 @@ class App extends Component {
     API.getBooks()
     .then(res => {
       console.log(res)
-      this.setState({ books: [...this.state.books, ...res.data] })
+      this.setState({ books: [...res.data] })
     })
     API.getMyBooks()
     .then(res => {
       console.log(res)
-      this.setState({ myBooks: [...this.state.myBooks, ...res.data] })
+      this.setState({ myBooks: [...res.data] })
     })
 }
 
@@ -64,7 +66,20 @@ class App extends Component {
       API.getBooks()
       .then(res => this.setState({ books: res.data }))
       API.getMyBooks()
-      .then(res => this.setState({ myBooks: [...this.state.myBooks, ...res.data] }))
+      .then(res => this.setState({ myBooks: [ ...res.data] }))
+      this.setState({ success: true, action: 'add', snackbarOpen: true })
+    })
+    .catch(err => {
+      console.error(err)
+      this.setState({ success: false, action: 'add', snackbarOpen: true })
+    })
+  }
+
+  handleAddNewBook = (book) => {
+    API.addNewBook(book)
+    .then(res => {
+      API.getBooks()
+      .then(res => this.setState({ books: res.data }))
       this.setState({ success: true, action: 'add', snackbarOpen: true })
     })
     .catch(err => {
@@ -114,6 +129,16 @@ class App extends Component {
       .then(res => this.setState({ fav: res.data }))
     })
   }
+
+  updateStatus = (book, newStatus) => {
+    console.log(newStatus);
+    API.updateStatus(book, newStatus)
+    .then(res => {
+      console.log(res);
+      API.getMyBooks()
+      .then(res => this.setState({ myBooks: res.data }))
+    })
+  }
   
   render () {
     const { open } = this.state;
@@ -148,7 +173,7 @@ class App extends Component {
             {[{ text: 'I miei libri', icon: faBookOpen, url: '/mybooks/'}, 
               { text: 'Preferiti', icon: faHeart, url: '/favourites/'}, 
               { text: 'In lettura', icon: faBookReader, url: '/current/'}, 
-              { text: 'Letti', icon: faBook, url: '/finished/'}].map(el => (
+              { text: 'Letti', icon: faBook, url: '/completed/'}].map(el => (
                 <Link to={el.url} className={classes.listLink} key={el.text}>
                   <ListItem button style={{ padding: '13px 16px' }}>
                     <ListItemIcon><FontAwesomeIcon size="2x" icon={el.icon} color="rgba(255, 255, 255, 0.7)" /></ListItemIcon>
@@ -162,7 +187,8 @@ class App extends Component {
             <Route path="/" exact render={(props) => 
             <Home 
               books={this.state.books} 
-              addBook={this.handleAddBook} 
+              addBook={this.handleAddBook}
+              addNewBook={this.handleAddNewBook}
               props={props} 
               />} 
             />
@@ -173,10 +199,31 @@ class App extends Component {
               removeBook={this.handleRemoveBook}
               addFav={this.handleAddFav}
               removeFav={this.handleRemoveFav}
+              updateStatus={this.updateStatus}
               props={props} 
               />} 
             />
-            <Route path="/favourites/" component={Favourites} />
+            <Route path="/favourites/" render={(props) => 
+            <Favourites 
+              books={this.state.myBooks} 
+              removeFav={this.handleRemoveFav}
+              props={props}
+            />} 
+            />
+            <Route path="/current/" render={(props) => 
+            <Reading 
+              books={this.state.myBooks} 
+              removeFav={this.handleRemoveFav}
+              props={props}
+            />} 
+            />
+            <Route path="/completed/" render={(props) => 
+            <Completed 
+              books={this.state.myBooks} 
+              removeFav={this.handleRemoveFav}
+              props={props}
+            />} 
+            />
             {
               this.state.snackbarOpen ?
               <Snackbar
@@ -188,9 +235,9 @@ class App extends Component {
               null
             }
         </main>
-        <footer className={classes.footer}>
+        {/* <footer className={classes.footer}>
                 Omar Shatani
-        </footer>
+        </footer> */}
       </div>
       );
     

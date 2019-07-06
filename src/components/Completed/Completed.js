@@ -6,7 +6,7 @@ import { styles } from '../styles';
 import { withStyles } from '@material-ui/core/styles';
 import Card from '../Card/Card';
 
-class Favourites extends PureComponent {
+class Completed extends PureComponent {
 
     constructor (props) {
         super(props)
@@ -29,7 +29,7 @@ class Favourites extends PureComponent {
         const { books, props, addBook, removeBook, addFav, removeFav, classes, updateStatus } = this.props;
         console.log(books)
         let arrayCards = []
-        arrayCards = books.filter(el => el.favoriti === 'true').map(el => 
+        arrayCards = books.filter(el => el.stato === 'Completato').map(el => 
             <Grid item key={el.id} >
                 <Card 
                 props={props}
@@ -56,7 +56,7 @@ class Favourites extends PureComponent {
                     justify="center"
                     alignItems="center"
                     >
-                    <Typography variant="h2" component="h2">Preferiti</Typography>
+                    <Typography variant="h2" component="h2">Completati</Typography>
                 </Grid>
                 <Grid container spacing={3} justify='center' className={classes.gridPadding}>
                     {
@@ -68,4 +68,4 @@ class Favourites extends PureComponent {
     }
 }
 
-export default withStyles(styles)(Favourites);
+export default withStyles(styles)(Completed);
